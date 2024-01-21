@@ -33,5 +33,6 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         # https://github.com/JamesIves/github-pages-deploy-action
         with:
-          folder: build # The folder the action should deploy.
+          folder: . # build # The folder the action should deploy.
+          # . signifies the root of the directory
   
