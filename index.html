@@ -12,8 +12,9 @@
 <div id="adobe-dc-view"></div>
 <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
 <script type="text/javascript">
+	api_key = process.env.secret_adobe_api_key
 	document.addEventListener("adobe_dc_view_sdk.ready", function(){ 
-		var adobeDCView = new AdobeDC.View({clientId: "3c54d68ce6b84ee2a6b0474a66317f7d", divId: "adobe-dc-view"});
+		var adobeDCView = new AdobeDC.View({clientId: api_key, divId: "adobe-dc-view"});
 		adobeDCView.previewFile({
 			content:{location: {url: "https://raw.githubusercontent.com/jthaller/resume_url_hosting/32236b74a33e69f6e12ffd6354e38c95ddcc5ed4/Jeremy_Thaller_Resume.pdf"}},
 			metaData:{fileName: "Jeremy_Thaller_Resume.pdf"}
