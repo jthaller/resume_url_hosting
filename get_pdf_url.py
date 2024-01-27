@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 def get_dynamic_pdf_url(url):
     # Send a GET request to the specified URL
     response = requests.get(url)
+    print(response.status_code)
 
     # Check if the request was successful (status code 200)
     if response.status_code == 200:
