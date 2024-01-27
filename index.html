@@ -13,7 +13,7 @@
 <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
 <script type="text/javascript">
 	const pdf_url = "https://raw.githubusercontent.com/jthaller/resume_url_hosting/dea0aa2402fec9aa24868f10e8e82973d9e69032/Jeremy_Thaller_Resume.pdf"
-	const api_key =  process.env.secret_adobe_api_key //"REPLACE_WITH_YOUR_API_KEY"
+	const api_key = "REPLACE_WITH_YOUR_API_KEY" //process.env.secret_adobe_api_key
 	document.addEventListener("adobe_dc_view_sdk.ready", function(){ 
 		var adobeDCView = new AdobeDC.View({clientId: api_key, divId: "adobe-dc-view"});
 		adobeDCView.previewFile({
