@@ -1,41 +1,27 @@
 import requests
-from bs4 import BeautifulSoup
-import json
+import sys
 
-def get_dynamic_pdf_url(url):
-    # Send a GET request to the specified URL
+def get_latest_commit_sha(repo, branch='main'):
+    url = f"https://api.github.com/repos/{repo}/commits/{branch}"
     response = requests.get(url)
-
-    # Check if the request was successful (status code 200)
+    
     if response.status_code == 200:
-        # Parse the HTML content using BeautifulSoup
-        soup = BeautifulSoup(response.content, 'html.parser')
-
-        # Find the script tag with the specified data-target attribute
-        script_tag = soup.find('script', {'data-target': 'react-app.embeddedData'})
-        if script_tag:
-            # Extract the content of the script tag
-            script_content = script_tag.string
-
-            # Parse the JSON content
-            try:
-                json_data = json.loads(script_content)
-                
-                # Extract the PDF URL from the JSON
-                pdf_url = json_data['payload']['fileTree']['']['items'][2]['path']
-                return f"https://github.com/jthaller/resume_url_hosting/raw/main/{pdf_url}"
-            except json.JSONDecodeError as e:
-                print(f"Failed to parse JSON: {e}")
+        commit_sha = response.json().get('sha')
+        if commit_sha:
+            return commit_sha
         else:
-            print("Script tag with data-target 'react-app.embeddedData' not found.")
+            print("Commit SHA not found.", file=sys.stderr)
     else:
-        print(f"Failed to fetch the URL. Status code: {response.status_code}")
+        print(f"Failed to fetch the latest commit. Status code: {response.status_code}", file=sys.stderr)
 
-# Example usage
-url = "view-source:https://github.com/jthaller/resume_url_hosting/blob/main/Jeremy_Thaller_Resume.pdf"
-dynamic_pdf_url = get_dynamic_pdf_url(url)
+    sys.exit(1)
 
-if dynamic_pdf_url:
-    print(f"The dynamic PDF URL is: {dynamic_pdf_url}")
-else:
-    print("Failed to retrieve the dynamic PDF URL.")
+def get_pdf_url(latest_commit_hash: str) -> str:
+    return f"https://raw.githubusercontent.com/jthaller/resume_url_hosting/{latest_commit_hash}/Jeremy_Thaller_Resume.pdf"
+
+
+if __name__ == "__main__":
+    repo = "jthaller/resume_url_hosting"
+    latest_commit_hash = get_latest_commit_sha(repo)
+    pdf_url = get_pdf_url(latest_commit_hash)
+    print(pdf_url)  # Print the PDF URL to capture it in the GitHub Actions workflow
